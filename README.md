@@ -1,8 +1,8 @@
 # Data Lab
 
-*Assigned: Saturday March 5th*
+*Assigned: Thursday, February 1st*
 
-*Due: Friday March 11th, 11:59PM EST*
+*Due: Saturday February 11th, 11:59PM EST*
 
 The goal of this lab is for you to experiment with working with data
 in various degrees of structure.  
@@ -13,9 +13,6 @@ approach.
 
 **The spirit** of this lab is to get you to think about different trade-offs
 that unstructured and structured data provide to you, as the developer.
-
-**We will discuss learning from this lab in lecture on Wednesday March 9th, so
-it will be most beneficial if attempted before lecture that day**
 
 # Setup
 
@@ -173,12 +170,12 @@ One or two sentences answers are sufficient
 ### Handing in your work
 
 1. Create a PDF file containing: 
-  * your name 
+  * your name and your uni
   * the results of the three analyses from Step 1 as run on the three systems in Steps 2, 3, and 4, 
   * the brief responses to the reflection questions 
-2. Create a folder that has all the code that **you've** written. Please don't upload the same files that we've provided for this assignment.
-3. Create a zip containing the PDF and the code folder 
-4. Submit on Courseworks.
+  * all the code for all the steps that **you've** written. Please don't upload the same files that we've provided for this assignment.
+  * other questions you may have
+2. Submit on Courseworks.
 
 ### Feedback (optional, but valuable)
 
