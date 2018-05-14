@@ -1,3 +1,10 @@
+# The homework is actually the implementation of Advanced_Analytics_with_Spark，_The_Second_Edition_（2017） Chapter 3.
+# The markdown is just the instrution of how to run on AWS EMR.
+# The solution markdown is labeled 
+
+
+
+
 # A simple Word Count Example using pyspark on AWS EMR
 
 #### Clone the repository
