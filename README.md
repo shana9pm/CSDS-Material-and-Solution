@@ -1,67 +1,72 @@
-# Log Analysis with Hadoop and Hive 
+# A simple Word Count Example using pyspark on AWS EMR
 
-> CSDS Assignment 2 by Prof. Sahu
+#### Clone the repository
+- Clone this repo to your local machine.
 
-In the previous assignment you worked with the Hadoop, HDFS and Hive environments to perform MapReduce jobs, loading data in HDFS and querying a small Hive database. Now we shall see and learn how to work with actual big data. In this assignment, you shall write your own MapReduce programs to perform more sophisticated tasks. Further you will create your own Hive database given the dataset in raw form and run few queries on it.
+#### Create cluster
+- We'll start off by creating an AWS EMR cluster, just as in the first assignment. Head over to [AWS EMR](https://aws.amazon.com/emr/) and get started.
+- Click on Create cluster and configure as per below - 
 
-This assignment can be performed on the same cloudera virtual machine that was used for the previous assignment. No further setup or installation will be needed. Although we recommend Python, you are free to use any language of your choice for this assignment.
+![img](http://imgur.com/Ed6DlBS.jpg)
 
-### DataSet - Nasa Server Logs
+- The cluster remains in the 'Starting' state for about 10 - 15 minutes. Once the cluster is ready for use, the status will change to 'Waiting'. You can now go ahead and use it.
 
-**File Name** - server-logs.gz
+#### Create private key for ssh access
+- Click on "Learn how to create an EC2 key pair" to create and modify your EC2 key pair.
 
-**Size** - The total size of the dataset is roughly 1GB after uncompressing the .gz file. 
+#### Allow inbound SSH traffic on the master node
+- On the left top corner goto Services->EC2
+- On the left hand panel goto Security Groups under Network & Security
+- Select the group named "ElasticMapReduce-master" and click Edit in the Inbound tab below
+- Add rule, select SSH for type and My IP as source. Save
 
-**Description** - The given data set contains Apache Logs gathered by NASA's server in the months of July-October, 1995.
+#### Upload input file on S3
+- Now head over to Services->S3 and create a bucket named csds
+- In the bucket, create a folder named csds-spark-emr
+- Upload the input.txt file from this repo
+- In permissions, tick the box for read everywhere. Nothing to do in properties
+- Head forward and submit the file
+- Click on the uploaded file and click the Make public button just to make sure
 
-The logs follow the standard [Apache log](https://httpd.apache.org/docs/2.4/logs.html#accesslog) format whereby each line denotes one request.
+#### Creating wordcount.py on the Master node
+- Now on our created cluster page (Cluster list->our cluster)
+- Near the "Master public DNS:" field click the SSH button
+- Follow the instructions and SSH on the master node
+- In /home/hadoop create wordcount.py (vi wordcount.py)
+- Copy over the contents from wordcount.py in this repo
+- In wordcount.py change the input file s3 url to point to input.txt in your bucket, created above
+- Save
 
-- Source IP 
-- Timestamp 
-- HTTP Method
-- Request URL
-- HTTP Protocol
-- Status Code 
-- Response Bytes
+#### Executing wordcount.py
+- Go through the code in wordcount.py and checkout what it does
+- Execute the script using "spark-submit wordcount.py | tee output.txt"
+- This will also generate output.txt with a copy of the logs
+- You may have the output file copied to your s3 bucket by using the cmd "aws s3 cp output.txt s3://my_bucket/my_folder/"
+- You should see the result of your code among other logs, should look like
 
-```
-129.188.154.200 - - [01/Jul/1995:00:03:14 -0400] "GET /images/launchpalms-small.gif HTTP/1.0" 200 11473
-```
+And: 2<br>
+on: 1<br>
+then: 1<br>
+Aberbrothok: 2<br>
+bell: 1<br>
+that: 1<br>
+of: 2<br>
+knew: 1<br>
+Had: 1<br>
+placed: 1<br>
+Abbot: 2<br>
+they: 1<br>
+worthy: 1<br>
+blest: 1<br>
+Rock: 2<br>
+Inchcape: 1<br>
+the: 3<br>
+The: 1<br>
+perilous: 1<br>
 
-Download and uncompress the dataset from [Google Drive](https://drive.google.com/open?id=0B6qnKGQsJnFfWG02N2loUVluck0). Go through the dataset to get a good idea of all the data and fields present. 
+- You're encouraged to play around with the code, check out the documentation and try things out
 
-#### Part a : Hive (50 points)
-
-1. Create a schema for the dataset in Hive. You will have to create a concrete structure describing all the required fields. (15)
-
-2. Find the number of 200 status code in the response in the month of August. (5)
-
-3. Find the number of unique source IPs that have made requests to the NASA server for the month of September. (5)
-
-4. Which was the most requested URL in the year 1995. (5)
-
-5. Make a simple plot (e.g a histogram) depicting the number of requests made in a day for every day in the month of October. You are free to choose any visualization tool for this part. (20)
-
-#### Part b : MapReduce (50 points)
-
-To solve each of the tasks below, you would need to write your own mapper and reducer.
-
-1. Enumerate all [HTTP status codes](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) and give counts of each (25)
-
-  **Output sample:**  
-  200 - 32476  
-  404 - 34846  
-  500 - 1234  
-  
-
-2. Find the total bandwidth that was sent by the Nasa webserver in the month of July 1995. (25)
-
- To calculate total bandwidth add all the response bytes sent by NASA webserver. NASA webservers have domain name ending with  nasa.gov.  Write a MapReduce job that will calculate total bandwidth and print it on STDOUT.
-
-##Submission Instructions:
-
-- Create a folder with the source code for both parts and the outputs (screenshots or text file).
-- Create a zip file named uni_hw2.zip. 
-- Upload this file only on courseworks. 
-
-Any and all doubts are welcome, feel free to ask on Piazza.
+#### Terminate the cluster
+- Don't forget to terminate your cluster after you're done
+- You'll need to follow the same steps next time you create a new cluster with the exception of creating private key for SSH, you can use the same private key for all clusters
+- Also make sure to allow inbound SSH traffic on the master every time your machine changes IP, which might happen when you switch between WiFi networks
